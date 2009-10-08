@@ -2,6 +2,10 @@ require 'sass'
 require 'sass/plugin'
 
 class Hassle
+  def initialize
+    Sass::Plugin.options[:cache] = false
+  end
+
   def css_location
     File.join(Dir.pwd, "tmp", "hassle")
   end

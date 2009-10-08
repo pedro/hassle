@@ -9,6 +9,10 @@ describe Hassle do
     @hassle.css_location.should == File.join(Dir.pwd, "tmp", "hassle")
   end
 
+  it "sets some necessary options for read only sass" do
+    Sass::Plugin.options[:cache].should be_false
+  end
+
   it "can compile sass into tmp directory with default settings" do
     default_location = Sass::Plugin.options[:css_location]
     FileUtils.mkdir_p(File.join(default_location, "sass"))
@@ -25,5 +29,6 @@ EOF
     compiled_path = File.join(@hassle.css_location, "screen.css")
     File.exists?(compiled_path).should be_true
     File.read(compiled_path).should match(/h1 \{/)
+    File.exists?(".sass-cache").should be_false
   end
 end
