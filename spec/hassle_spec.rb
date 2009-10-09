@@ -65,5 +65,18 @@ describe Hassle do
       sass_one.should be_compiled
       sass_two.should be_compiled
     end
+
+    it "should compile sass if template location is an array with multiple locations" do
+      location_one = "public/css/sass"
+      location_two = "public/stylesheets/sass"
+      sass_one = write_sass(location_one, "one")
+      sass_two = write_sass(location_two, "two")
+      Sass::Plugin.options[:template_location] = [[location_one, "public/css"], [location_two, "public/css"]]
+
+      @hassle.compile
+
+      sass_one.should be_compiled
+      sass_two.should be_compiled
+    end
   end
 end
