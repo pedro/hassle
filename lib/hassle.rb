@@ -15,8 +15,15 @@ class Hassle
   def compile
     setup
 
-    Sass::Plugin.options[:template_location] = File.join(Sass::Plugin.options[:css_location], "sass")
+    if Sass::Plugin.options[:template_location]
+      Sass::Plugin.options[:template_location].keys.each do |key|
+        Sass::Plugin.options[:template_location][key] = css_location
+      end
+    else
+      Sass::Plugin.options[:template_location] = File.join(Sass::Plugin.options[:css_location], "sass")
+    end
+
     Sass::Plugin.options[:css_location] = css_location
-		Sass::Plugin.update_stylesheets
+    Sass::Plugin.update_stylesheets
   end
 end

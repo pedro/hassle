@@ -1,9 +1,11 @@
 require File.join(File.dirname(__FILE__), "base")
 
 describe Hassle do
-	before do
+  before do
+    Sass::Plugin.options.clear
+    Sass::Plugin.options = SASS_OPTIONS
     @hassle = Hassle.new
-	end
+  end
 
   it "uses the current tmp directory by default" do
     @hassle.css_location.should == File.join(Dir.pwd, "tmp", "hassle")
@@ -12,20 +14,11 @@ describe Hassle do
   describe "compiling sass" do
     before do
       system("git clean -dfxq")
-      default_location = Sass::Plugin.options[:css_location]
-      FileUtils.mkdir_p(File.join(default_location, "sass"))
-      sass_path = File.join(default_location, "sass", "screen.sass")
-      File.open(sass_path, "w") do |f|
-        f.write <<EOF
-%h1
-  font-size: 42em
-EOF
-      end
-
-      @compiled_path = File.join(@hassle.css_location, "screen.css")
+      @default_location = Sass::Plugin.options[:css_location]
     end
 
     it "moves css into tmp directory with default settings" do
+      write_sass(File.join(@default_location, "sass"))
       @hassle.compile
 
       File.exists?(@compiled_path).should be_true
@@ -33,6 +26,7 @@ EOF
     end
 
     it "should not create sass cache" do
+      write_sass(File.join(@default_location, "sass"))
       Sass::Plugin.options[:cache] = true
       @hassle.compile
 
@@ -40,7 +34,18 @@ EOF
     end
 
     it "should compile sass even if disabled with never_update" do
+      write_sass(File.join(@default_location, "sass"))
       Sass::Plugin.options[:never_update] = true
+      @hassle.compile
+
+      File.exists?(@compiled_path).should be_true
+      File.read(@compiled_path).should match(/h1 \{/)
+    end
+
+    it "should compile sass if template location is a hash" do
+      new_location = "public/css/sass"
+      write_sass(new_location)
+      Sass::Plugin.options[:template_location] = {new_location => "public/css"}
       @hassle.compile
 
       File.exists?(@compiled_path).should be_true
