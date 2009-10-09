@@ -6,9 +6,9 @@ require File.dirname(__FILE__) + '/../lib/hassle'
 
 SASS_OPTIONS = Sass::Plugin.options.dup
 
-def write_sass(location)
+def write_sass(location, css_file = "screen")
   FileUtils.mkdir_p(location)
-  sass_path = File.join(location, "screen.sass")
+  sass_path = File.join(location, "#{css_file}.sass")
   File.open(sass_path, "w") do |f|
     f.write <<EOF
 %h1
@@ -16,5 +16,5 @@ def write_sass(location)
 EOF
   end
 
-  @compiled_path = File.join(@hassle.css_location, "screen.css")
+  File.join(@hassle.css_location, "#{css_file}.css")
 end

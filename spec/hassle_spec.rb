@@ -18,11 +18,11 @@ describe Hassle do
     end
 
     it "moves css into tmp directory with default settings" do
-      write_sass(File.join(@default_location, "sass"))
+      sass = write_sass(File.join(@default_location, "sass"))
       @hassle.compile
 
-      File.exists?(@compiled_path).should be_true
-      File.read(@compiled_path).should match(/h1 \{/)
+      File.exists?(sass).should be_true
+      File.read(sass).should match(/h1 \{/)
     end
 
     it "should not create sass cache" do
@@ -34,22 +34,37 @@ describe Hassle do
     end
 
     it "should compile sass even if disabled with never_update" do
-      write_sass(File.join(@default_location, "sass"))
+      sass = write_sass(File.join(@default_location, "sass"))
       Sass::Plugin.options[:never_update] = true
       @hassle.compile
 
-      File.exists?(@compiled_path).should be_true
-      File.read(@compiled_path).should match(/h1 \{/)
+      File.exists?(sass).should be_true
+      File.read(sass).should match(/h1 \{/)
     end
 
     it "should compile sass if template location is a hash" do
       new_location = "public/css/sass"
-      write_sass(new_location)
+      sass = write_sass(new_location)
       Sass::Plugin.options[:template_location] = {new_location => "public/css"}
       @hassle.compile
 
-      File.exists?(@compiled_path).should be_true
-      File.read(@compiled_path).should match(/h1 \{/)
+      File.exists?(sass).should be_true
+      File.read(sass).should match(/h1 \{/)
+    end
+
+    it "should compile sass if template location is a hash with multiple locations" do
+      location_one = "public/css/sass"
+      location_two = "public/stylesheets/sass"
+      sass_one = write_sass(location_one, "one")
+      sass_two = write_sass(location_two, "two")
+      Sass::Plugin.options[:template_location] = {location_one => "public/css", location_two => "public/css"}
+      @hassle.compile
+
+      File.exists?(sass_one).should be_true
+      File.read(sass_one).should match(/h1 \{/)
+
+      File.exists?(sass_two).should be_true
+      File.read(sass_two).should match(/h1 \{/)
     end
   end
 end
