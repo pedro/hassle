@@ -18,3 +18,10 @@ EOF
 
   File.join(@hassle.css_location, "#{css_file}.css")
 end
+
+def be_compiled
+  simple_matcher("exist") { |given| File.exists?(given) }
+  simple_matcher("contain compiled sass") { |given| File.read(given) =~ /h1 \{/ }
+end
+
+

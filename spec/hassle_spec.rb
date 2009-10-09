@@ -19,15 +19,16 @@ describe Hassle do
 
     it "moves css into tmp directory with default settings" do
       sass = write_sass(File.join(@default_location, "sass"))
+
       @hassle.compile
 
-      File.exists?(sass).should be_true
-      File.read(sass).should match(/h1 \{/)
+      sass.should be_compiled
     end
 
     it "should not create sass cache" do
       write_sass(File.join(@default_location, "sass"))
       Sass::Plugin.options[:cache] = true
+
       @hassle.compile
 
       File.exists?(".sass-cache").should be_false
@@ -36,20 +37,20 @@ describe Hassle do
     it "should compile sass even if disabled with never_update" do
       sass = write_sass(File.join(@default_location, "sass"))
       Sass::Plugin.options[:never_update] = true
+
       @hassle.compile
 
-      File.exists?(sass).should be_true
-      File.read(sass).should match(/h1 \{/)
+      sass.should be_compiled
     end
 
     it "should compile sass if template location is a hash" do
       new_location = "public/css/sass"
       sass = write_sass(new_location)
       Sass::Plugin.options[:template_location] = {new_location => "public/css"}
+
       @hassle.compile
 
-      File.exists?(sass).should be_true
-      File.read(sass).should match(/h1 \{/)
+      sass.should be_compiled
     end
 
     it "should compile sass if template location is a hash with multiple locations" do
@@ -58,13 +59,11 @@ describe Hassle do
       sass_one = write_sass(location_one, "one")
       sass_two = write_sass(location_two, "two")
       Sass::Plugin.options[:template_location] = {location_one => "public/css", location_two => "public/css"}
+
       @hassle.compile
 
-      File.exists?(sass_one).should be_true
-      File.read(sass_one).should match(/h1 \{/)
-
-      File.exists?(sass_two).should be_true
-      File.read(sass_two).should match(/h1 \{/)
+      sass_one.should be_compiled
+      sass_two.should be_compiled
     end
   end
 end
