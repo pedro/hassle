@@ -8,14 +8,14 @@ describe Hassle::Compiler do
   end
 
   it "dumps css into separate folders" do
-    @hassle.css_location("./public/stylesheets").should ==
+    @hassle.css_location("./public/stylesheets/sass").should ==
       File.join(Dir.pwd, "tmp", "hassle", "stylesheets")
 
-    @hassle.css_location("./public/css").should ==
+    @hassle.css_location("./public/css/compiled").should ==
       File.join(Dir.pwd, "tmp", "hassle", "css")
 
-    @hassle.css_location("./public/one/two").should ==
-      File.join(Dir.pwd, "tmp", "hassle", "one", "two")
+    @hassle.css_location("./public/styles/posts/sass").should ==
+      File.join(Dir.pwd, "tmp", "hassle", "styles", "posts")
   end
 
   describe "compiling sass" do

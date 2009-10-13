@@ -20,7 +20,7 @@ class Hassle::Compiler
     expanded = File.expand_path(path)
     public_dir = File.join(File.expand_path(Dir.pwd), "public")
 
-    File.join(Dir.pwd, "tmp", "hassle", expanded.gsub(public_dir, ''))
+    File.expand_path(File.join(Dir.pwd, "tmp", "hassle", expanded.gsub(public_dir, ''), '..'))
   end
 
   def normalize
