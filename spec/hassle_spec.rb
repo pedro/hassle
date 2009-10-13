@@ -7,15 +7,16 @@ describe Hassle do
     @hassle = Hassle.new
   end
 
-  #it "dumps css into separate folders" do
-  #  @hassle.css_location(Sass::Plugin.options[:css_location]).should ==
-  #    File.join(Dir.pwd, "tmp", "hassle", "stylesheets")
-  #end
+  it "dumps css into separate folders" do
+    @hassle.css_location("./public/stylesheets").should ==
+      File.join(Dir.pwd, "tmp", "hassle", "stylesheets")
 
-  #it "dumps css into separate folders" do
-  #  @hassle.css_location("./public/css").should ==
-  #    File.join(Dir.pwd, "tmp", "hassle", "css")
-  #end
+    @hassle.css_location("./public/css").should ==
+      File.join(Dir.pwd, "tmp", "hassle", "css")
+
+    @hassle.css_location("./public/one/two").should ==
+      File.join(Dir.pwd, "tmp", "hassle", "one", "two")
+  end
 
   describe "compiling sass" do
     before do
@@ -78,6 +79,19 @@ describe Hassle do
       Sass::Plugin.options[:template_location] = [[location_one, "public/css"], [location_two, "public/css"]]
       sass_one = write_sass(location_one, "one")
       sass_two = write_sass(location_two, "two")
+
+      @hassle.compile
+
+      sass_one.should be_compiled
+      sass_two.should be_compiled
+    end
+
+    it "should not overwrite similarly name files in different directories" do
+      location_one = "public/css/sass"
+      location_two = "public/stylesheets/sass"
+      Sass::Plugin.options[:template_location] = {location_one => "public/css", location_two => "public/css"}
+      sass_one = write_sass(location_one, "screen")
+      sass_two = write_sass(location_two, "screen")
 
       @hassle.compile
 

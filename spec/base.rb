@@ -16,7 +16,7 @@ def write_sass(location, css_file = "screen")
 EOF
   end
 
-  File.join(@hassle.css_location, "#{css_file}.css")
+  File.join(@hassle.css_location(location), "#{css_file}.css")
 end
 
 def be_compiled
