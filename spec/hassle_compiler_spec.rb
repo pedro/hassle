@@ -2,8 +2,7 @@ require File.join(File.dirname(__FILE__), "base")
 
 describe Hassle::Compiler do
   before do
-    Sass::Plugin.options.clear
-    Sass::Plugin.options = SASS_OPTIONS
+    reset
     @hassle = Hassle::Compiler.new
   end
 
@@ -20,7 +19,6 @@ describe Hassle::Compiler do
 
   describe "compiling sass" do
     before do
-      FileUtils.rm_rf([File.join(Dir.pwd, "public"), File.join(Dir.pwd, "tmp")])
       @default_location = Sass::Plugin.options[:css_location]
     end
 

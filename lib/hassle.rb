@@ -4,6 +4,8 @@ require 'sass/plugin'
 class Hassle
   def initialize(app)
     @app = app
+    @compiler = Hassle::Compiler.new
+    @compiler.compile
   end
 
 	def call(env)

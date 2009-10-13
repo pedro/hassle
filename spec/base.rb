@@ -16,7 +16,7 @@ def write_sass(location, css_file = "screen")
 EOF
   end
 
-  File.join(@hassle.css_location(location), "#{css_file}.css")
+  File.join(@hassle.css_location(location), "#{css_file}.css") if @hassle
 end
 
 def be_compiled
@@ -24,4 +24,8 @@ def be_compiled
   simple_matcher("contain compiled sass") { |given| File.read(given) =~ /h1 \{/ }
 end
 
-
+def reset
+  Sass::Plugin.options.clear
+  Sass::Plugin.options = SASS_OPTIONS
+  FileUtils.rm_rf([File.join(Dir.pwd, "public"), File.join(Dir.pwd, "tmp")])
+end
