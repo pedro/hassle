@@ -45,6 +45,12 @@ class Hassle::Compiler
     end
   end
 
+  def stylesheets
+    options[:template_location].to_a.map do |location|
+      Dir[File.join(location.last, "**", "*.css")]
+    end.flatten.sort
+  end
+
   def compile
     normalize
     prepare
