@@ -2,6 +2,16 @@ require 'sass'
 require 'sass/plugin'
 
 class Hassle
+  def initialize(app)
+    @app = app
+  end
+
+	def call(env)
+		@app.call(env)
+	end
+end
+
+class Hassle::Compiler
   def options
     Sass::Plugin.options
   end
