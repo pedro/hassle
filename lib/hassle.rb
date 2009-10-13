@@ -2,15 +2,6 @@ require 'sass'
 require 'sass/plugin'
 
 class Hassle
-  def setup
-    @original_css_location = options[:css_location]
-
-    options.merge!(:cache        => false,
-                   :never_update => false,
-                   :css_location => css_location)
-    FileUtils.mkdir_p(css_location)
-  end
-
   def options
     Sass::Plugin.options
   end
@@ -31,13 +22,20 @@ class Hassle
         location[-1] = css_location
       end
     else
-      options[:template_location] = File.join(@original_css_location, "sass")
+      options.merge!(:template_location => File.join(options[:css_location], "sass"),
+                     :css_location      => css_location)
     end
   end
 
+  def prepare
+    options.merge!(:cache        => false,
+                   :never_update => false)
+    FileUtils.mkdir_p(css_location)
+  end
+
   def compile
-    setup
     normalize
+    prepare
     Sass::Plugin.update_stylesheets
   end
 end

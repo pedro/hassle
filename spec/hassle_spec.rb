@@ -7,9 +7,15 @@ describe Hassle do
     @hassle = Hassle.new
   end
 
-  it "uses the current tmp directory by default" do
-    @hassle.css_location.should == File.join(Dir.pwd, "tmp", "hassle")
-  end
+  #it "dumps css into separate folders" do
+  #  @hassle.css_location(Sass::Plugin.options[:css_location]).should ==
+  #    File.join(Dir.pwd, "tmp", "hassle", "stylesheets")
+  #end
+
+  #it "dumps css into separate folders" do
+  #  @hassle.css_location("./public/css").should ==
+  #    File.join(Dir.pwd, "tmp", "hassle", "css")
+  #end
 
   describe "compiling sass" do
     before do
@@ -45,8 +51,8 @@ describe Hassle do
 
     it "should compile sass if template location is a hash" do
       new_location = "public/css/sass"
-      sass = write_sass(new_location)
       Sass::Plugin.options[:template_location] = {new_location => "public/css"}
+      sass = write_sass(new_location)
 
       @hassle.compile
 
@@ -56,9 +62,9 @@ describe Hassle do
     it "should compile sass if template location is a hash with multiple locations" do
       location_one = "public/css/sass"
       location_two = "public/stylesheets/sass"
+      Sass::Plugin.options[:template_location] = {location_one => "public/css", location_two => "public/css"}
       sass_one = write_sass(location_one, "one")
       sass_two = write_sass(location_two, "two")
-      Sass::Plugin.options[:template_location] = {location_one => "public/css", location_two => "public/css"}
 
       @hassle.compile
 
@@ -69,9 +75,9 @@ describe Hassle do
     it "should compile sass if template location is an array with multiple locations" do
       location_one = "public/css/sass"
       location_two = "public/stylesheets/sass"
+      Sass::Plugin.options[:template_location] = [[location_one, "public/css"], [location_two, "public/css"]]
       sass_one = write_sass(location_one, "one")
       sass_two = write_sass(location_two, "two")
-      Sass::Plugin.options[:template_location] = [[location_one, "public/css"], [location_two, "public/css"]]
 
       @hassle.compile
 
