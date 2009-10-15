@@ -30,6 +30,12 @@ def have_tmp_dir_removed(*stylesheets)
   end
 end
 
+def have_served_sass
+  simple_matcher("return success") { |given| given.status == 200 }
+  simple_matcher("compiled sass") { |given| given.body.should =~ /h1 \{/ }
+  simple_matcher("cache it") { |given| given.headers['Cache-Control'].should =~ /max-age=86400/ }
+end
+
 def reset
   Sass::Plugin.options.clear
   Sass::Plugin.options = SASS_OPTIONS
