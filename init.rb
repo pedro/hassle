@@ -1,3 +1,3 @@
 if RAILS_ENV == 'production'
-	ActionController::Dispatcher.middleware.use SassOnHeroku
+	ActionController::Dispatcher.middleware.use Hassle
 end
