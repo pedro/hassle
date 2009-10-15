@@ -4,20 +4,19 @@ require 'sass/plugin'
 class Hassle
   def initialize(app)
     @app = app
-    compiler = Hassle::Compiler.new
-    compiler.compile
-    @stylesheets = compiler.stylesheets
+    @compiler = Hassle::Compiler.new
+    @compiler.compile
   end
 
   def call(env)
-    if !@stylesheets.empty? && env['PATH_INFO'] =~ css_request_regexp
+    if !@compiler.stylesheets.empty? && env['PATH_INFO'] =~ css_request_regexp
       return render_sass($1)
     end
     @app.call(env)
   end
 
   def render_sass(name)
-    css_file = File.join("tmp", "hassle", name)
+    css_file = @compiler.compile_location(name)
     [
       200,
       {
@@ -34,7 +33,7 @@ class Hassle
   end
 
   def build_regexp
-    files = @stylesheets.map { |f| Regexp.escape(f) }.join('|')
+    files = @compiler.stylesheets.map { |f| Regexp.escape(f) }.join('|')
     /^(#{files})(\?.*)?$/
   end
 end
@@ -48,7 +47,11 @@ class Hassle::Compiler
     expanded = File.expand_path(path)
     public_dir = File.join(File.expand_path(Dir.pwd), "public")
 
-    File.expand_path(File.join(Dir.pwd, "tmp", "hassle", expanded.gsub(public_dir, ''), '..'))
+    File.expand_path(compile_location(expanded.gsub(public_dir, ''), '..'))
+  end
+
+  def compile_location(*subdirs)
+    File.join(Dir.pwd, "tmp", "hassle", subdirs)
   end
 
   def normalize
@@ -75,8 +78,8 @@ class Hassle::Compiler
 
   def stylesheets
     options[:template_location].to_a.map do |location|
-      Dir[File.join(location.last, "**", "*.css")]
-    end.flatten.sort.map { |css| css.gsub(File.join(Dir.pwd, "tmp", "hassle"), "") }
+      Dir[File.join(location.last, "**", "*.css")].map { |css| css.gsub(compile_location, "/") }
+    end.flatten.sort
   end
 
   def compile
