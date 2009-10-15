@@ -12,7 +12,7 @@ describe Hassle do
 
   before do
     reset
-    write_sass("./public/stylesheets")
+    write_sass("./public/stylesheets/sass")
   end
 
   it "sends through basic responses" do
@@ -25,5 +25,6 @@ describe Hassle do
     get '/stylesheets/screen.css'
     last_response.status.should == 200
     last_response.body.should =~ /h1 \{/
+    last_response.headers['Cache-Control'].should =~ /max-age=86400/
   end
 end

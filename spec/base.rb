@@ -24,6 +24,12 @@ def be_compiled
   simple_matcher("contain compiled sass") { |given| File.read(given) =~ /h1 \{/ }
 end
 
+def have_tmp_dir_removed(*stylesheets)
+  simple_matcher("remove tmp dir") do |given|
+    given == stylesheets.map { |css| css.gsub(File.join(Dir.pwd, "tmp", "hassle"), "") }
+  end
+end
+
 def reset
   Sass::Plugin.options.clear
   Sass::Plugin.options = SASS_OPTIONS

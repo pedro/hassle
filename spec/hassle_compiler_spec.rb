@@ -28,7 +28,7 @@ describe Hassle::Compiler do
       @hassle.compile
 
       sass.should be_compiled
-      @hassle.stylesheets.should == [sass]
+      @hassle.stylesheets.should have_tmp_dir_removed(sass)
     end
 
     it "should not create sass cache" do
@@ -70,7 +70,7 @@ describe Hassle::Compiler do
 
       sass_one.should be_compiled
       sass_two.should be_compiled
-      @hassle.stylesheets.should == [sass_one, sass_two]
+      @hassle.stylesheets.should have_tmp_dir_removed(sass_one, sass_two)
     end
 
     it "should compile sass if template location is an array with multiple locations" do
@@ -84,7 +84,7 @@ describe Hassle::Compiler do
 
       sass_one.should be_compiled
       sass_two.should be_compiled
-      @hassle.stylesheets.should == [sass_one, sass_two]
+      @hassle.stylesheets.should have_tmp_dir_removed(sass_one, sass_two)
     end
 
     it "should not overwrite similarly name files in different directories" do
@@ -98,7 +98,7 @@ describe Hassle::Compiler do
 
       sass_one.should be_compiled
       sass_two.should be_compiled
-      @hassle.stylesheets.should == [sass_one, sass_two]
+      @hassle.stylesheets.should have_tmp_dir_removed(sass_one, sass_two)
     end
   end
 end
