@@ -6,35 +6,13 @@ class Hassle
     @app = app
     @compiler = Hassle::Compiler.new
     @compiler.compile
+    @static = Rack::Static.new(@app,
+                               :urls => @compiler.stylesheets,
+                               :root => @compiler.compile_location)
   end
 
   def call(env)
-    if !@compiler.stylesheets.empty? && env['PATH_INFO'] =~ css_request_regexp
-      return render_sass($1)
-    end
-    @app.call(env)
-  end
-
-  def render_sass(name)
-    css_file = @compiler.compile_location(name)
-    [
-      200,
-      {
-        'Cache-Control'  => 'public, max-age=86400',
-        'Content-Length' => File.size(css_file).to_s,
-        'Content-Type'   => 'text/css'
-      },
-      File.read(css_file)
-    ]
-  end
-
-  def css_request_regexp
-    @css_request_regexp ||= build_regexp
-  end
-
-  def build_regexp
-    files = @compiler.stylesheets.map { |f| Regexp.escape(f) }.join('|')
-    /^(#{files})(\?.*)?$/
+    @static.call(env)
   end
 end
 
