@@ -1,14 +1,14 @@
+require 'rack'
 require 'sass'
 require 'sass/plugin'
 
 class Hassle
   def initialize(app)
-    @app = app
-    @compiler = Hassle::Compiler.new
-    @compiler.compile
-    @static = Rack::Static.new(@app,
-                               :urls => @compiler.stylesheets,
-                               :root => @compiler.compile_location)
+    compiler = Hassle::Compiler.new
+    compiler.compile
+    @static = Rack::Static.new(app,
+                               :urls => compiler.stylesheets,
+                               :root => compiler.compile_location)
   end
 
   def call(env)
