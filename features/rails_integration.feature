@@ -1,6 +1,6 @@
-Feature: Integration into Rack Apps
+Feature: Integration into Rails Apps
   As someone who loves syntactically awesome stylesheets
-  I want to be able to use sass when on (mostly) read only file systems
+  I want to be able to use sass when on (mostly) read only file systems and using Rails
   In order to make css less of a hassle
 
   Scenario: Use hassle with Rails in production mode
@@ -28,6 +28,3 @@ Feature: Integration into Rack Apps
     When Hassle is installed as a plugin
     And the Rails app is initialized in "development" mode
     Then the file "tmp/hassle/stylesheets/hassle.css" should not exist
-
-  Scenario: Use hassle with Sinatra
-  Scenario: Use hassle with a pure Rack app
