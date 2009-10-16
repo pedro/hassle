@@ -1,6 +1,6 @@
-h1. hassle
+h1. Hassle
 
-Making "SASS":http://sass-lang.com/ less of a hassle on read only filesystems (like "Heroku":http://heroku.com!)
+Making "SASS":http://sass-lang.com/ less of a hassle on read only filesystems. (like "Heroku":http://heroku.com)
 
 h2. usage
 
@@ -25,7 +25,7 @@ $ tree
 Include in your views with:
 
 <pre>
-  <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
 </pre>
 
 Hassle will look at the default sass directory (@public/stylesheets/sass@) and other input directories given in @Sass::Plugin.options[:template_location]@. CSS files are then compiled into @tmp/@ one directory higher than where you specified. Here's a small example of customization:
@@ -53,24 +53,24 @@ $ tree
 Include in your views with:
 
 <pre>
-  <link href="/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
 </pre>
 
-h2. integration
+h2. Integration
 
 Here's how to integrate it with your favorite web framework:
 
-h3. rails
+h3. Rails
 
 For Rails: @script/plugin install git://github.com/pedro/hassle@. Done. Once you're in production mode, Hassle will kick in and prepare your SASS for all to enjoy.
 
-h3. sinatra
+h3. Sinatra
 
-Here's a sample config.ru that's running at http://hassle-sinatra.heroku.com:
+Here's a sample config.ru that's running here:"http://hassle-sinatra.heroku.com":
 
 <pre>
 require 'sinatra'
-require 'hassle/lib/hassle'
+require 'hassle'
 require 'haml'
 
 get '/' do
@@ -86,3 +86,20 @@ end
 use Hassle
 run Sinatra::Application
 </pre>
+
+And its wonderful SASS file:
+
+<pre>
+$ cat public/stylesheets/sass/application.sass 
+h1
+  font-size: 11em
+  color: purple
+</pre>
+
+h2. Bugs
+
+Found some problems? Post 'em in "Issues":http://github.com/pedro/hassle/issues.
+
+h2. License
+
+Hassle uses the MIT license. Please check the LICENSE file for more details.
