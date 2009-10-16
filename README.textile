@@ -2,9 +2,9 @@ h1. Hassle
 
 Making "SASS":http://sass-lang.com/ less of a hassle on read only filesystems. (like "Heroku":http://heroku.com)
 
-h2. usage
+h2. Usage
 
-By default, SASS compiles CSS into the @public/@ directory. On platforms like Heroku, this just won't do. Instead, hassle compiles the SASS for you into @tmp/@ and serves it up via a @Rack::Static@ middleware.
+By default, SASS compiles CSS into the @public/@ directory. On platforms like Heroku, "this won't work.":http://docs.heroku.com/constraints#read-only-filesystem. Instead, Hassle compiles the SASS for you into @tmp/@ and serves it up via a @Rack::Static@ middleware.
 
 Hassle assumes a few basic things about your setup: There's going to be a @tmp/@ directory where it can write to, and @public/@ is where you store your css. A simple example:
 
@@ -22,7 +22,7 @@ $ tree
             `-- application.css
 </pre>
 
-Include in your views with:
+With a basic SASS file in @public/stylesheets/sass/application.sass@, you can include it in your views with:
 
 <pre>
 <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
@@ -50,7 +50,7 @@ $ tree
             `-- screen.css
 </pre>
 
-Include in your views with:
+Include this in your views with:
 
 <pre>
 <link href="/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
