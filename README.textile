@@ -1,0 +1,88 @@
+h1. hassle
+
+Making "SASS":http://sass-lang.com/ less of a hassle on read only filesystems (like "Heroku":http://heroku.com!)
+
+h2. usage
+
+By default, SASS compiles CSS into the @public/@ directory. On platforms like Heroku, this just won't do. Instead, hassle compiles the SASS for you into @tmp/@ and serves it up via a @Rack::Static@ middleware.
+
+Hassle assumes a few basic things about your setup: There's going to be a @tmp/@ directory where it can write to, and @public/@ is where you store your css. A simple example:
+
+<pre>
+$ tree
+.
+|-- config.ru
+|-- public
+|   `-- stylesheets
+|       `-- sass
+|           `-- application.sass
+`-- tmp
+    `-- hassle
+        `-- stylesheets
+            `-- application.css
+</pre>
+
+Include in your views with:
+
+<pre>
+  <link href="/stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+</pre>
+
+Hassle will look at the default sass directory (@public/stylesheets/sass@) and other input directories given in @Sass::Plugin.options[:template_location]@. CSS files are then compiled into @tmp/@ one directory higher than where you specified. Here's a small example of customization:
+
+<pre>
+Sass::Plugin.options[:template_location] = "./public/css/templates"
+</pre>
+
+And after Hassle runs...
+
+<pre>
+$ tree
+.
+|-- config.ru
+|-- public
+|   `-- css
+|       `-- templates
+|           `-- screen.sass
+`-- tmp
+    `-- hassle
+        `-- css
+            `-- screen.css
+</pre>
+
+Include in your views with:
+
+<pre>
+  <link href="/css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+</pre>
+
+h2. integration
+
+Here's how to integrate it with your favorite web framework:
+
+h3. rails
+
+For Rails: @script/plugin install git://github.com/pedro/hassle@. Done. Once you're in production mode, Hassle will kick in and prepare your SASS for all to enjoy.
+
+h3. sinatra
+
+Here's a sample config.ru that's running at http://hassle-sinatra.heroku.com:
+
+<pre>
+require 'sinatra'
+require 'hassle/lib/hassle'
+require 'haml'
+
+get '/' do
+  haml <<EOF
+%html
+  %head
+    %link{:rel => 'stylesheet', :href => "stylesheets/application.css"}
+  %body
+    %h1 Hassle!
+EOF
+end
+
+use Hassle
+run Sinatra::Application
+</pre>
