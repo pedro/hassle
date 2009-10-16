@@ -2,6 +2,14 @@ h1. Hassle
 
 Making "SASS":http://sass-lang.com/ less of a hassle on read only filesystems. (like "Heroku":http://heroku.com)
 
+h2. Install
+
+Get it from "Gemcutter.":http://gemcutter.org
+
+<pre>
+gem install hassle -s http://gemcutter.org
+</pre>
+
 h2. Usage
 
 By default, SASS compiles CSS into the @public/@ directory. On platforms like Heroku, "this won't work.":http://docs.heroku.com/constraints#read-only-filesystem Instead, Hassle compiles the SASS for you into @tmp/@ and serves it up via a @Rack::Static@ middleware.
@@ -66,7 +74,7 @@ For Rails: @script/plugin install git://github.com/pedro/hassle@. Done. Once you
 
 h3. Sinatra
 
-Here's a sample config.ru that's running here: "http://hassle-sinatra.heroku.com":http://hassle-sinatra.heroku.com
+Here's a sample config.ru that's "up and running.":http://hassle-sinatra.heroku.com
 
 <pre>
 require 'sinatra'
