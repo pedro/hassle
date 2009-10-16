@@ -17,8 +17,11 @@ When /^Hassle is installed as a plugin$/ do
   FileUtils.cp_r(ORIGINAL_DIR, File.join(TEST_DIR, "vendor", "plugins", "hassle"))
 end
 
-When /^the app is initialized in production mode$/ do
-  ENV["RAILS_ENV"] = "production"
+When /^the Rails app is initialized in "(.*)" mode$/ do |environment|
+  ENV["RAILS_ENV"] = environment
   require File.expand_path('./config/environment')
 end
 
+Then /^the file "([^\"]*)" should not exist$/ do |path|
+  File.exists?(path).should be_false
+end
